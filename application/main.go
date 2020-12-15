@@ -2,20 +2,19 @@ package main
 
 import (
 	"fmt"
-	"net/http"
-	"log"
 	"github.com/gorilla/mux"
+	"log"
+	"net/http"
 )
 
-
-// Test
+// GreetHandler returns the greetings along with browser user agent
 func GreetHandler(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 	ua := r.UserAgent()
 	fmt.Fprintf(w, "Greetings user of %s", ua)
 }
 
-// Test
+// IndexHandler returns the REST API introduction message
 func IndexHandler(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 	fmt.Fprint(w, "Simple REST API which greets users")
@@ -23,12 +22,12 @@ func IndexHandler(w http.ResponseWriter, r *http.Request) {
 
 func main() {
 	router := mux.NewRouter()
-	
+
 	router.HandleFunc("/", IndexHandler).Methods("GET")
-	
+
 	v1Router := router.PathPrefix("/v1").Subrouter()
 	v1Router.HandleFunc("/greet", GreetHandler).Methods("GET")
-	
-    log.Fatal(http.ListenAndServe(":8383", router))
+
+	log.Fatal(http.ListenAndServe(":8383", router))
 
 }

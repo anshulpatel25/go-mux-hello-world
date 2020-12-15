@@ -1,0 +1,25 @@
+---
+resources:
+  - name: source-code
+    type: git
+    source:
+      uri: https://github.com/anshulpatel25/go-mux-hello-world.git
+      branch: ((branch))
+jobs:
+  - name: tests
+    serial: true
+    plan:
+      - get: source-code
+      - task: execute-lint-tests
+        file: source-code/ci/lint_test.yml
+        params:
+          SRC_CODE_DIR: source-code/application
+        vars:
+          root_code_dir: source-code
+      - task: execute-unit-tests
+        file: source-code/ci/unit_test.yml
+        params:
+          SRC_CODE_DIR: source-code/application
+        vars:
+          root_code_dir: source-code
+        
