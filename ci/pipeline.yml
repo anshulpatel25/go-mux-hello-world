@@ -1,13 +1,25 @@
 ---
 resources:
+# Git resource is required to fetch the source code
   - name: source-code
     type: git
     source:
       uri: https://github.com/anshulpatel25/go-mux-hello-world.git
       branch: ((branch))
+
+# docker-image resource is required to compile the Golang application, 
+# build the container image and push it to the Dockerhub
+  - name: container-image
+    type: docker-image
+    source:
+      username: ((docker-hub-username))
+      password: ((docker-hub-password))
+      repository: ((docker-hub-username))/go-mux-hello-world
+      tag: ((container-image-tag))
+
 jobs:
+  # tests job performs lint and unit tests
   - name: tests
-    serial: true
     plan:
       - get: source-code
       - task: execute-lint-tests
@@ -22,4 +34,14 @@ jobs:
           SRC_CODE_DIR: source-code/application
         vars:
           root_code_dir: source-code
+  
+  # build job compiles and builds the Docker image
+  - name: build
+    plan:
+      - get: source-code
+        passed: [tests]
+        trigger: true
+      - put: container-image
+        params:
+            build: source-code
         

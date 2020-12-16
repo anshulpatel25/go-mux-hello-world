@@ -5,8 +5,14 @@
 *.so
 *.dylib
 
+# Don't commit sensitive information
+credentials.yml
+
 # Test binary, built with `go test -c`
 *.test
+
+# Don't commit the binary
+server
 
 # Output of the go coverage tool, specifically when used with LiteIDE
 *.out
