@@ -1,0 +1,29 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: test
+spec:
+  resources:
+    inputs:
+      - name: repo
+        type: git
+  params:
+    - name: directory
+      type: string
+  steps:
+    - name: run-lint
+      image: golang
+      workingDir: "/workspace/repo/$(params.directory)"
+      script: |
+        #!/usr/bin/env bash
+        echo "Executing Lint under $(params.directory)"
+        go get -u golang.org/x/lint/golint
+        golint -set_exit_status && echo "Lint Successful"
+    - name: run-test
+      image: golang
+      workingDir: "/workspace/repo/$(params.directory)"
+      script: |
+        #!/usr/bin/env bash
+        echo "Executing Unit Tests under $(params.directory)"
+        go test -coverprofile=coverage.out
+        go tool cover -func=coverage.out

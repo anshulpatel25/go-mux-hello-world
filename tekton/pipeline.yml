@@ -1,0 +1,22 @@
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: go-mux-hello-world
+spec:
+  params:
+    - name: directory
+      type: string
+  resources:
+    - name: repo
+      type: git
+  tasks:
+    - name: test
+      taskRef:
+        name: test
+      params:
+        - name: directory
+          value: "$(params.directory)"
+      resources:
+        inputs:
+          - name: repo
+            resource: repo

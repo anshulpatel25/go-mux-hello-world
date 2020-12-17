@@ -1,0 +1,14 @@
+apiVersion: tekton.dev/v1beta1
+kind: PipelineRun
+metadata:
+  name: go-mux-hello-world
+spec:
+  params:
+    - name: directory
+      value: application
+  pipelineRef:
+    name: go-mux-hello-world
+  resources:
+  - name: repo
+    resourceRef:
+      name: go-mux-hello-world
