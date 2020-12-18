@@ -2,9 +2,16 @@ apiVersion: tekton.dev/v1beta1
 kind: Pipeline
 metadata:
   name: go-mux-hello-world
+  namespace: exp
 spec:
   params:
     - name: directory
+      type: string
+    - name: dockerfile
+      type: string
+    - name: tag
+      type: string
+    - name: image
       type: string
   resources:
     - name: repo
@@ -16,6 +23,21 @@ spec:
       params:
         - name: directory
           value: "$(params.directory)"
+      resources:
+        inputs:
+          - name: repo
+            resource: repo
+    - name: build-and-push
+      runAfter: [test]
+      taskRef:
+        name: build-and-push
+      params:
+        - name: dockerfile
+          value: "$(params.dockerfile)"
+        - name: image
+          value: "$(params.image)"
+        - name: tag
+          value: "$(params.tag)"
       resources:
         inputs:
           - name: repo

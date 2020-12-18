@@ -2,6 +2,7 @@ apiVersion: tekton.dev/v1beta1
 kind: Task
 metadata:
   name: test
+  namespace: exp
 spec:
   resources:
     inputs:
@@ -27,3 +28,37 @@ spec:
         echo "Executing Unit Tests under $(params.directory)"
         go test -coverprofile=coverage.out
         go tool cover -func=coverage.out
+
+---
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: build-and-push
+  namespace: exp
+spec:
+  resources:
+    inputs:
+      - name: repo
+        type: git
+  params:
+    - name: tag
+      type: string
+      default: latest
+    - name: dockerfile
+      type: string
+      default: ./Dockerfile
+    - name: image
+      type: string
+      default: ./Dockerfile
+  steps:
+    - name: build-and-push
+      image: gcr.io/kaniko-project/executor:v1.3.0
+      workingDir: "/workspace/repo"
+      env:
+        - name: DOCKER_CONFIG
+          value: /tekton/home/.docker
+      command:
+        - /kaniko/executor
+        - --dockerfile=$(params.dockerfile)
+        - --context=/workspace/repo
+        - --destination=$(params.image):$(params.tag)
