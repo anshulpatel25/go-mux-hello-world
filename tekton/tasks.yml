@@ -62,3 +62,40 @@ spec:
         - --dockerfile=$(params.dockerfile)
         - --context=/workspace/repo
         - --destination=$(params.image):$(params.tag)
+
+---
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: app-deploy
+  namespace: exp
+spec:
+  params:
+    - name: deployment-name
+      type: string
+    - name: deployment-ns
+      type: string
+      default: exp
+    - name: deployment-image
+      type: string
+    - name: deployment-tag
+      type: string
+      default: latest
+  resources:
+    inputs:
+      - name: micro-k8s-cluster
+        type: cluster
+
+  steps:
+    - name: deploy
+      image: lachlanevenson/k8s-kubectl
+      command: ['kubectl']
+      args:
+        - 'create'
+        - 'deployment'
+        - '$(params.deployment-name)'
+        - '--image'
+        - '$(params.deployment-image):$(params.deployment-tag)'
+        - '--namespace'
+        - '$(params.deployment-ns)'
+

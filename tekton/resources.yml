@@ -1,3 +1,4 @@
+---
 apiVersion: tekton.dev/v1alpha1
 kind: PipelineResource
 metadata:
@@ -10,3 +11,25 @@ spec:
       value: https://github.com/anshulpatel25/go-mux-hello-world
     - name: revision
       value: main
+
+
+---
+apiVersion: tekton.dev/v1alpha1
+kind: PipelineResource
+metadata:
+  name: micro-k8s-cluster
+  namespace: exp
+spec:
+  type: cluster
+  params:
+    - name: url
+      value: https://172.31.4.175:16443
+    - name: username
+      value: tekton-deploy-bot
+  secrets:
+    - fieldName: token
+      secretKey: tokenKey
+      secretName: micro-k8s-cluster
+    - fieldName: cadata
+      secretKey: cadataKey
+      secretName: micro-k8s-cluster
