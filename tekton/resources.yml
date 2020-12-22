@@ -28,8 +28,8 @@ spec:
       value: tekton-deploy-bot
   secrets:
     - fieldName: token
-      secretKey: tokenKey
-      secretName: micro-k8s-cluster
+      secretKey: token
+      secretName: tekton-deploy-bot-token
     - fieldName: cadata
-      secretKey: cadataKey
-      secretName: micro-k8s-cluster
+      secretKey: ca.crt
+      secretName: tekton-deploy-bot-token
