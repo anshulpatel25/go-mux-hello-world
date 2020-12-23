@@ -35,8 +35,14 @@ spec:
           value: $(tt.params.deployment-ns)
       resources:
         - name: repo
-          resourceRef:
-            name: go-mux-hello-world
+          resourceSpec:
+            type: git
+            params:
+              - name: revision
+                value: $(tt.params.branch)
+              - name: url
+                value: https://github.com/anshulpatel25/go-mux-hello-world
+
         - name: cluster
           resourceRef:
-            name: micro-k8s-cluster
+            name: $(tt.params.cluster)

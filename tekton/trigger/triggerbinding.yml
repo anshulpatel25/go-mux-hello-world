@@ -17,3 +17,8 @@ spec:
       value: $(body.deploymentName)
     - name: deployment-ns
       value: $(body.deploymentNS)
+    - name: branch
+      value: $(body.branch)
+    - name: cluster
+      value: $(body.cluster)
+
