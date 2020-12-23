@@ -1,0 +1,24 @@
+apiVersion: triggers.tekton.dev/v1alpha1
+kind: TriggerBinding
+metadata:
+  name: go-mux-hello-world
+  namespace: exp
+spec:
+  params:
+    - name: directory
+      value: $(body.directory)
+    - name: dockerfile
+      value: $(body.dockerfile)
+    - name: tag
+      value: $(body.tag)
+    - name: image
+      value: $(body.image)
+    - name: deployment-name
+      value: $(body.deploymentName)
+    - name: deployment-ns
+      value: $(body.deploymentNS)
+    - name: branch
+      value: $(body.branch)
+    - name: cluster
+      value: $(body.cluster)
+

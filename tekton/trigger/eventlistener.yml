@@ -1,0 +1,13 @@
+apiVersion: triggers.tekton.dev/v1alpha1
+kind: EventListener
+metadata:
+  name: go-mux-hello-world
+  namespace: exp
+spec:
+  serviceAccountName: tekton-trigger
+  triggers:
+    - name: go-mux-hello-world
+      bindings:
+        - ref: go-mux-hello-world
+      template:
+        name: go-mux-hello-world

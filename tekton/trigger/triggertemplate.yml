@@ -1,0 +1,50 @@
+apiVersion: triggers.tekton.dev/v1alpha1
+kind: TriggerTemplate
+metadata:
+  name: go-mux-hello-world
+  namespace: exp
+spec:
+  params:
+    - name: directory
+    - name: dockerfile
+    - name: tag
+    - name: image
+    - name: deployment-name
+    - name: deployment-ns
+    - name: branch
+    - name: cluster
+  resourcetemplates:
+  - apiVersion: tekton.dev/v1beta1
+    kind: PipelineRun
+    metadata:
+      generateName: go-mux-hello-world-
+    spec:
+      serviceAccountName: tekton-docker-bot
+      pipelineRef:
+        name: go-mux-hello-world
+      params:
+        - name: directory
+          value: $(tt.params.directory)
+        - name: dockerfile
+          value: $(tt.params.dockerfile)
+        - name: tag
+          value: $(tt.params.tag)
+        - name: image
+          value: $(tt.params.image)
+        - name: deployment-name
+          value: $(tt.params.deployment-name)
+        - name: deployment-ns
+          value: $(tt.params.deployment-ns)
+      resources:
+        - name: repo
+          resourceSpec:
+            type: git
+            params:
+              - name: revision
+                value: $(tt.params.branch)
+              - name: url
+                value: https://github.com/anshulpatel25/go-mux-hello-world
+
+        - name: cluster
+          resourceRef:
+            name: $(tt.params.cluster)
