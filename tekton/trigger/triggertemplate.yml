@@ -1,20 +1,48 @@
 apiVersion: triggers.tekton.dev/v1alpha1
 kind: TriggerTemplate
 metadata:
-  name: echo-template
+  name: go-mux-hello-world
   namespace: exp
 spec:
   params:
-  - name: message
-    default: Anshul Patel
+    - name: directory
+      type: string
+    - name: dockerfile
+      type: string
+    - name: tag
+      type: string
+    - name: image
+      type: string
+    - name: deployment-name
+      type: string
+    - name: deployment-ns
+      type: string  
   resourcetemplates:
   - apiVersion: tekton.dev/v1beta1
-    kind: TaskRun
+    kind: PipelineRun
     metadata:
-      generateName: echo-run-
+      generateName: go-mux-hello-world-
     spec:
-      taskRef:
-        name: echo
+      serviceAccountName: tekton-docker-bot
+      pipelineRef:
+        name: go-mux-hello-world
       params:
-      - name: message
-        value: $(tt.params.message)
+        - name: directory
+          value: $(tt.params.directory)
+        - name: dockerfile
+          value: $(tt.params.dockerfile)
+        - name: tag
+          value: $(tt.params.tag)
+        - name: image
+          value: $(tt.params.image)
+        - name: deployment-name
+          value: $(tt.params.deployment-name)
+        - name: deployment-ns
+          value: $(tt.params.deployment-ns)
+      resources:
+        - name: repo
+          resourceRef:
+            name: go-mux-hello-world
+        - name: cluster
+          resourceRef:
+            name: micro-k8s-cluster
