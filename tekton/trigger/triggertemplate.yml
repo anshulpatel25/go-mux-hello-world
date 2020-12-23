@@ -1,0 +1,20 @@
+apiVersion: triggers.tekton.dev/v1beta1
+kind: TriggerTemplate
+metadata:
+  name: echo-template
+  namespace: exp
+spec:
+  params:
+  - name: message
+    default: Anshul Patel
+  resourcetemplates:
+  - apiVersion: tekton.dev/v1beta1
+    kind: TaskRun
+    metadata:
+      generateName: echo-run-
+    spec:
+      taskRef:
+        name: echo
+      params:
+      - name: message
+        value: $(tt.params.message)

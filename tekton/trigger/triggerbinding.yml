@@ -1,0 +1,9 @@
+apiVersion: triggers.tekton.dev/v1beta1
+kind: TriggerBinding
+metadata:
+  name: echo-binding
+  namespace: exp
+spec:
+  params:
+  - name: message
+    value: $(body.message)

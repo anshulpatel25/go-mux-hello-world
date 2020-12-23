@@ -1,0 +1,13 @@
+apiVersion: tekton.dev/v1beta1
+kind: EventListener
+metadata:
+  name: echo
+  namespace: exp
+spec:
+  serviceAccountName: tekton-trigger
+  triggers:
+    - name: echo
+      bindings:
+        - ref: echo-binding
+      template:
+        name: echo-template
