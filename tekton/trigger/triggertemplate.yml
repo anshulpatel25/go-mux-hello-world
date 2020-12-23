@@ -6,17 +6,11 @@ metadata:
 spec:
   params:
     - name: directory
-      type: string
     - name: dockerfile
-      type: string
     - name: tag
-      type: string
     - name: image
-      type: string
     - name: deployment-name
-      type: string
     - name: deployment-ns
-      type: string  
   resourcetemplates:
   - apiVersion: tekton.dev/v1beta1
     kind: PipelineRun
