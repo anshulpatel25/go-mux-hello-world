@@ -11,6 +11,8 @@ spec:
     - name: image
     - name: deployment-name
     - name: deployment-ns
+    - name: branch
+    - name: cluster
   resourcetemplates:
   - apiVersion: tekton.dev/v1beta1
     kind: PipelineRun
